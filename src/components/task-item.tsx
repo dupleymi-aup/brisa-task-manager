@@ -106,6 +106,15 @@ export default function TaskItem(
                 type="text"
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSave();
+                  } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    handleCancel();
+                  }
+                }}
                 placeholder="Введите заголовок задачи..."
                 class="edit-input"
                 autoFocus
@@ -118,6 +127,15 @@ export default function TaskItem(
                 id="edit-description"
                 value={editDescription}
                 onChange={(e) => setEditDescription(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSave();
+                  } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    handleCancel();
+                  }
+                }}
                 placeholder="Введите описание задачи..."
                 rows={3}
                 class="edit-description"
@@ -130,6 +148,15 @@ export default function TaskItem(
                 id="edit-priority"
                 value={editPriority}
                 onChange={(e) => setEditPriority(e.target.value as Task['priority'])}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSave();
+                  } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    handleCancel();
+                  }
+                }}
                 class="edit-select"
               >
                 <option value="low">Низкий</option>
@@ -145,6 +172,15 @@ export default function TaskItem(
                 id="edit-due-date"
                 value={editDueDate}
                 onChange={(e) => setEditDueDate(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSave();
+                  } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    handleCancel();
+                  }
+                }}
                 class="edit-input"
               />
             </div>
@@ -156,6 +192,15 @@ export default function TaskItem(
                 id="edit-tags"
                 value={editTags}
                 onChange={(e) => setEditTags(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSave();
+                  } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    handleCancel();
+                  }
+                }}
                 placeholder="например: работа, важное, встреча"
                 class="edit-input"
               />

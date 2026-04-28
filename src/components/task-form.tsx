@@ -16,7 +16,7 @@ export default function TaskForm({ store }: RequestContext, { state }: WebContex
 
     // Parse dueDate if provided
     const parsedDueDate = dueDate ? new Date(dueDate) : undefined;
-    
+
     // Validate date
     if (dueDate && isNaN(parsedDueDate.getTime())) {
       alert('Пожалуйста, введите корректную дату');
@@ -60,6 +60,16 @@ export default function TaskForm({ store }: RequestContext, { state }: WebContex
           id="task-title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              // Найти и отправить форму
+              const form = e.target.closest('form');
+              if (form) {
+                form.dispatchEvent(new Event('submit'));
+              }
+            }
+          }}
           placeholder="Введите заголовок задачи..."
           required
         />
@@ -71,6 +81,16 @@ export default function TaskForm({ store }: RequestContext, { state }: WebContex
           id="task-description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              // Найти и отправить форму
+              const form = e.target.closest('form');
+              if (form) {
+                form.dispatchEvent(new Event('submit'));
+              }
+            }
+          }}
           placeholder="Введите описание задачи..."
           rows={3}
         />
@@ -82,6 +102,16 @@ export default function TaskForm({ store }: RequestContext, { state }: WebContex
           id="task-priority"
           value={priority}
           onChange={(e) => setPriority(e.target.value as 'low' | 'medium' | 'high')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              // Найти и отправить форму
+              const form = e.target.closest('form');
+              if (form) {
+                form.dispatchEvent(new Event('submit'));
+              }
+            }
+          }}
         >
           <option value="low">Низкий</option>
           <option value="medium">Средний</option>
@@ -96,6 +126,16 @@ export default function TaskForm({ store }: RequestContext, { state }: WebContex
           id="task-due-date"
           value={dueDate}
           onChange={(e) => setDueDate(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              // Найти и отправить форму
+              const form = e.target.closest('form');
+              if (form) {
+                form.dispatchEvent(new Event('submit'));
+              }
+            }
+          }}
         />
       </div>
       
@@ -106,6 +146,16 @@ export default function TaskForm({ store }: RequestContext, { state }: WebContex
           id="task-tags"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              // Найти и отправить форму
+              const form = e.target.closest('form');
+              if (form) {
+                form.dispatchEvent(new Event('submit'));
+              }
+            }
+          }}
           placeholder="например: работа, важное, встреча"
         />
       </div>
