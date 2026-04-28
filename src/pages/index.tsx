@@ -161,7 +161,7 @@ export default function Homepage({ store }: RequestContext, { state }: WebContex
       </div>
 
       <section class="task-manager-section">
-        {/* <TaskForm /> */}
+        <TaskForm />
         <TaskList />
       </section>
     </>

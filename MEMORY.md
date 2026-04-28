@@ -1,0 +1,2 @@
+- [Add authentication system (authStore) and login/logout functionality to homepage](file:///C:/Users/dupleymi/.qwen/projects/c--users-dupleymi-documents-github-brisa-task-manager/memory/user_role.md) — Added authentication system with login/logout
+- [Enhance authentication system with registration, email support, and improved UI](file:///C:/Users/dupleymi/.qwen/projects/c--users-dupleymi-documents-github-brisa-task-manager/memory/feedback_testing.md) — Enhanced auth with registration and email
