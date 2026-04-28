@@ -74,7 +74,7 @@ export default function TaskForm({ store }: RequestContext, { state }: WebContex
           required
         />
       </div>
-      
+
       <div class="form-group">
         <label htmlFor="task-description">Описание:</label>
         <textarea
@@ -95,7 +95,7 @@ export default function TaskForm({ store }: RequestContext, { state }: WebContex
           rows={3}
         />
       </div>
-      
+
       <div class="form-group">
         <label htmlFor="task-priority">Приоритет:</label>
         <select
@@ -118,7 +118,7 @@ export default function TaskForm({ store }: RequestContext, { state }: WebContex
           <option value="high">Высокий</option>
         </select>
       </div>
-      
+
       <div class="form-group">
         <label htmlFor="task-due-date">Срок выполнения:</label>
         <input
@@ -138,7 +138,7 @@ export default function TaskForm({ store }: RequestContext, { state }: WebContex
           }}
         />
       </div>
-      
+
       <div class="form-group">
         <label htmlFor="task-tags">Теги (через запятую):</label>
         <input
@@ -159,7 +159,7 @@ export default function TaskForm({ store }: RequestContext, { state }: WebContex
           placeholder="например: работа, важное, встреча"
         />
       </div>
-      
+
       <button type="submit" class="submit-button">Добавить задачу</button>
     </form>
   );

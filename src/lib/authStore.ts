@@ -4,6 +4,7 @@ import type { RequestContext } from 'brisa';
 export type User = {
   id: string;
   username: string;
+  email?: string;
 };
 
 // In-memory store for auth state
@@ -86,7 +87,8 @@ export function login({ store }: RequestContext, username: string, password: str
   if (username === 'admin' && password === 'admin') {
     const user: User = {
       id: '1',
-      username
+      username,
+      email: 'admin@example.com'
     };
     setAuth({ store }, { isAuthenticated: true, user });
     return true;
