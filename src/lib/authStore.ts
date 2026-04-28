@@ -96,6 +96,23 @@ export function login({ store }: RequestContext, username: string, password: str
   return false;
 }
 
+export function register({ store }: RequestContext, username: string, email: string, password: string): boolean {
+  // Simple registration for demo
+  // In a real app, this would validate input and call an API
+  if (username.trim() !== '' && email.trim() !== '' && password.trim() !== '') {
+    // Check if user already exists (in a real app, this would check against a database)
+    // For demo, we'll just allow registration
+    const user: User = {
+      id: Math.random().toString(36).substr(2, 9),
+      username,
+      email
+    };
+    setAuth({ store }, { isAuthenticated: true, user });
+    return true;
+  }
+  return false;
+}
+
 export function logout({ store }: RequestContext): void {
   setAuth({ store }, { isAuthenticated: false, user: null });
 }
