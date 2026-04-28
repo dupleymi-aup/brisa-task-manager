@@ -170,7 +170,11 @@ export default function TaskItem(
       </div>
       <div class="task-actions">
         {!isEditing && (
-          <button class="delete-button" onClick={() => onDelete(task.id)}>
+          <button class="delete-button" onClick={() => {
+            if (window.confirm('Вы уверены, что хотите удалить эту задачу?')) {
+              onDelete(task.id);
+            }
+          }}>
             Удалить
           </button>
         )}
