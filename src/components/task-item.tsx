@@ -12,11 +12,14 @@ export default function TaskItem(
 ) {
   // Determine if task is overdue (due date passed and not completed)
   const isOverdue = !task.completed && task.dueDate && task.dueDate < new Date();
-  
+
   // Editing state
   const [isEditing, setIsEditing] = state(false);
   const [editTitle, setEditTitle] = state(task.title);
   const [editDescription, setEditDescription] = state(task.description || '');
+  const [editPriority, setEditPriority] = state<Task['priority']>(task.priority);
+  const [editDueDate, setEditDueDate] = state<string>(task.dueDate ? task.dueDate.toISOString().split('T')[0] : '');
+  const [editTags, setEditTags] = state<string>(task.tags.join(', '));
 
   // Priority colors
   const priorityColors: Record<Task['priority'], string> = {
@@ -26,12 +29,27 @@ export default function TaskItem(
   };
 
   const handleSave = () => {
+    // Parse dueDate if provided
+    const parsedDueDate = editDueDate ? new Date(editDueDate) : undefined;
+    
+    // Validate date
+    if (editDueDate && isNaN(parsedDueDate.getTime())) {
+      alert('Пожалуйста, введите корректную дату');
+      return;
+    }
+
     const updatedTask: Task = {
       ...task,
       title: editTitle.trim(),
       description: editDescription.trim(),
+      priority: editPriority,
+      dueDate: parsedDueDate,
+      tags: editTags
+        .split(',')
+        .map(tag => tag.trim())
+        .filter(tag => tag.length > 0)
     };
-    
+
     // Only save if title is not empty
     if (updatedTask.title) {
       onUpdate(updatedTask);
@@ -43,6 +61,9 @@ export default function TaskItem(
     setIsEditing(false);
     setEditTitle(task.title);
     setEditDescription(task.description || '');
+    setEditPriority(task.priority);
+    setEditDueDate(task.dueDate ? task.dueDate.toISOString().split('T')[0] : '');
+    setEditTags(task.tags.join(', '));
   };
 
   return (
@@ -86,12 +107,56 @@ export default function TaskItem(
                 autoFocus
               />
             </div>
-            <textarea
-              value={editDescription}
-              onChange={(e) => setEditDescription(e.target.value)}
-              placeholder="Введите описание задачи..."
-              class="edit-description"
-            />
+            
+            <div class="form-group">
+              <label htmlFor="edit-description">Описание:</label>
+              <textarea
+                id="edit-description"
+                value={editDescription}
+                onChange={(e) => setEditDescription(e.target.value)}
+                placeholder="Введите описание задачи..."
+                rows={3}
+                class="edit-description"
+              />
+            </div>
+            
+            <div class="form-group">
+              <label htmlFor="edit-priority">Приоритет:</label>
+              <select
+                id="edit-priority"
+                value={editPriority}
+                onChange={(e) => setEditPriority(e.target.value as Task['priority'])}
+                class="edit-select"
+              >
+                <option value="low">Низкий</option>
+                <option value="medium">Средний</option>
+                <option value="high">Высокий</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label htmlFor="edit-due-date">Срок выполнения:</label>
+              <input
+                type="date"
+                id="edit-due-date"
+                value={editDueDate}
+                onChange={(e) => setEditDueDate(e.target.value)}
+                class="edit-input"
+              />
+            </div>
+            
+            <div class="form-group">
+              <label htmlFor="edit-tags">Теги (через запятую):</label>
+              <input
+                type="text"
+                id="edit-tags"
+                value={editTags}
+                onChange={(e) => setEditTags(e.target.value)}
+                placeholder="например: работа, важное, встреча"
+                class="edit-input"
+              />
+            </div>
+            
             <div class="task-edit-actions">
               <button class="save-button" onClick={handleSave}>
                 Сохранить

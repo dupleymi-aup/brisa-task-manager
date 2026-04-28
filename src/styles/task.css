@@ -313,24 +313,25 @@
 
 /* Edit Mode */
 .edit-input,
-.edit-textarea {
+.edit-textarea,
+.edit-select {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .edit-textarea {
   resize: vertical;
   min-height: 60px;
-  margin-bottom: 0.5rem;
 }
 
 .edit-actions {
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .save-button {
@@ -357,6 +358,25 @@
 
 .cancel-button:hover {
   background: #7f8c8d;
+}
+
+.task-edit {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.task-edit .form-group {
+  margin-bottom: 1rem;
+}
+
+.task-edit .form-group label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
 }
 
 /* Responsive */
