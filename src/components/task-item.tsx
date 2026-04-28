@@ -12,6 +12,10 @@ export default function TaskItem(
 ) {
   // Determine if task is overdue (due date passed and not completed)
   const isOverdue = !task.completed && task.dueDate && task.dueDate < new Date();
+  
+  // Determine if task is due today (due date is today and not completed)
+  const isDueToday = !task.completed && task.dueDate && 
+    task.dueDate.toDateString() === new Date().toDateString();
 
   // Editing state
   const [isEditing, setIsEditing] = state(false);
@@ -67,7 +71,7 @@ export default function TaskItem(
   };
 
   return (
-    <li class={`task-item ${task.completed ? 'completed' : ''} ${isOverdue ? 'overdue' : ''}`}>
+    <li class={`task-item ${task.completed ? 'completed' : ''} ${isOverdue ? 'overdue' : ''} ${isDueToday ? 'due-today' : ''}`}>
       <div class="task-content">
         {!isEditing ? (
           <>

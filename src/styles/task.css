@@ -218,6 +218,11 @@
   border-left: 4px solid #ff6b6b;
 }
 
+.task-item.due-today {
+  border-left: 4px solid #f39c12;
+  background-color: #fff8e1;
+}
+
 .task-item:last-child {
   border-bottom: none;
 }
