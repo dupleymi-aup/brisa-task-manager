@@ -161,7 +161,7 @@ export default function Homepage({ store }: RequestContext, { state }: WebContex
       </div>
 
       <section class="task-manager-section">
-        <TaskForm />
+        {/* TaskForm is temporarily disabled due to build issues */}
         <TaskList />
       </section>
     </>
