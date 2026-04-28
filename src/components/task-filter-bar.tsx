@@ -63,6 +63,7 @@ export default function TaskFilterBar(
 
     const matchesTags =
       selectedTags.length === 0 ||
+      (selectedTags.length === 1 && selectedTags[0] === '') ||
       selectedTags.every(tag => task.tags.includes(tag));
 
     return matchesCompletion && matchesPriority && matchesSearch && matchesTags;
