@@ -14,15 +14,15 @@
     "noEmit": true,
     "composite": true,
     "strict": true,
-    "downlevelIteration": true,
     "skipLibCheck": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "jsxImportSource": "brisa",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "verbatimModuleSyntax": true,
     "noFallthroughCasesInSwitch": true,
+    "ignoreDeprecations": ["6.0"],
     "types": [
       "brisa"
     ],
