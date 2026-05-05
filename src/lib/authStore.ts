@@ -53,6 +53,10 @@ function saveAuthToLocalStorage() {
 initializeAuth();
 
 export function getAuth({ store }: RequestContext): { isAuthenticated: boolean; user: User | null } {
+  // Handle case when store is not available (e.g., in tests)
+  if (!store || typeof store.transferToClient !== 'function') {
+    return { isAuthenticated, user };
+  }
   // Get auth from store, or initialize if not present
   let storedAuth = store.get('auth') as { isAuthenticated: boolean; user: User | null } | undefined;
 

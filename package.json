@@ -6,10 +6,12 @@
     "dev": "brisa dev",
     "dev:debug": "brisa dev --debug",
     "build": "brisa build",
+    "build:fix": "brisa build && node scripts/fix-windows-paths.js",
+    "fix-paths": "node scripts/fix-windows-paths.js",
     "start": "brisa start"
   },
   "dependencies": {
-    "brisa": "^0.1.6",
+    "brisa": "^0.2.15",
     "preact": "^10.29.1"
   },
   "devDependencies": {

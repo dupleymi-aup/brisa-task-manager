@@ -225,6 +225,10 @@ export function importTasks(json: string): void {
 
 // Server-side task store functions
 export function getServerTasks({ store }: RequestContext): Task[] {
+  // Handle case when store is not available (e.g., in tests)
+  if (!store || typeof store.transferToClient !== 'function') {
+    return Array.from(tasks.values());
+  }
   // Get tasks from store, or initialize if not present
   let storedTasks = store.get('tasks') as Task[] | undefined;
   
@@ -247,6 +251,7 @@ export function getServerTasks({ store }: RequestContext): Task[] {
 
 export function setServerTasks({ store }: RequestContext, tasksArray: Task[]): void {
   tasks = new Map(tasksArray.map(task => [task.id, task]));
+  if (!store) return;
   store.set('tasks', tasksArray);
   store.transferToClient(['tasks']);
   

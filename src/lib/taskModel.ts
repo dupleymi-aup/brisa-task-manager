@@ -11,6 +11,7 @@ export interface Task {
 }
 
 export type TaskFilter = 'all' | 'active' | 'completed';
+export type TaskPriorityFilter = 'all' | 'low' | 'medium' | 'high';
 export type TaskSortBy = 'createdAt' | 'dueDate' | 'priority' | 'title';
 export type TaskSortOrder = 'asc' | 'desc';
 
@@ -21,5 +22,5 @@ export interface TaskFilters {
   searchTerm: string;
   sortBy: TaskSortBy;
   sortOrder: TaskSortOrder;
-  tags: string[]; // Filter by tags (empty array means no filter)
+  tags: string[];
 }

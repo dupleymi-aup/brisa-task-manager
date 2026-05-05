@@ -1,5 +1,0 @@
-import type { WebContext } from 'brisa';
-
-export default function TaskForm({ state }: WebContext) {
-  return <div>Task Form</div>;
-}

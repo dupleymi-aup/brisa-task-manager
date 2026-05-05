@@ -1,9 +1,10 @@
 import type { RequestContext, WebContext } from 'brisa';
 import { rerenderInAction } from 'brisa/server';
-import { Task } from '@/lib/taskModel';
+import { Task, TaskFilter, TaskPriorityFilter, TaskSortBy, TaskSortOrder } from '@/lib/taskModel';
 import { getTasks, updateTask, deleteTask, clearCompletedTasks, getServerTasks, setServerTasks } from '@/lib/taskStore';
 import TaskItem from './task-item';
 import TaskFilterBar from './task-filter-bar';
+import TaskForm from './task-form';
 
 export default function TaskList(
   { store }: RequestContext,
@@ -13,11 +14,11 @@ export default function TaskList(
   const allTasks = getServerTasks({ store });
 
   // UI state using Brisa's state
-  const [currentFilter, setCurrentFilter] = state<'all' | 'active' | 'completed'>('all');
-  const [currentPriorityFilter, setCurrentPriorityFilter] = state<'all' | 'low' | 'medium' | 'high'>('all');
+  const [currentFilter, setCurrentFilter] = state<TaskFilter>('all');
+  const [currentPriorityFilter, setCurrentPriorityFilter] = state<TaskPriorityFilter>('all');
   const [searchTerm, setSearchTerm] = state<string>('');
-  const [sortBy, setSortBy] = state<'createdAt' | 'dueDate' | 'priority' | 'title'>('createdAt');
-  const [sortOrder, setSortOrder] = state<'asc' | 'desc'>('desc');
+  const [sortBy, setSortBy] = state<TaskSortBy>('createdAt');
+  const [sortOrder, setSortOrder] = state<TaskSortOrder>('desc');
   const [selectedTags, setSelectedTags] = state<string[]>([]);
 
   // Apply filters
@@ -136,7 +137,7 @@ export default function TaskList(
   return (
     <div class="task-list">
       <h2>Задачи</h2>
-      
+      <TaskForm { ...{ store } } />
       <TaskFilterBar
         currentFilter={currentFilter}
         currentPriorityFilter={currentPriorityFilter}
