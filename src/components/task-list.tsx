@@ -62,9 +62,9 @@ export default function TaskList(
       const numB = priorityMap[sortValueB];
       comparison = numA - numB;
     } else if (sortBy === 'dueDate') {
-      // Handle undefined dueDate (put them at the end)
-      const dateA = sortValueA ? sortValueA.getTime() : (sortOrder === 'asc' ? Infinity : -Infinity);
-      const dateB = sortValueB ? sortValueB.getTime() : (sortOrder === 'asc' ? Infinity : -Infinity);
+      // Handle undefined dueDate (always put at the end)
+      const dateA = sortValueA ? sortValueA.getTime() : Infinity;
+      const dateB = sortValueB ? sortValueB.getTime() : Infinity;
       comparison = dateA - dateB;
     } else if (sortBy === 'createdAt') {
       comparison = sortValueA.getTime() - sortValueB.getTime();
