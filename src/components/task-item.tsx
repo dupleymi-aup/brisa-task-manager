@@ -128,7 +128,7 @@ export default function TaskItem(
                 value={editDescription}
                 onChange={(e) => setEditDescription(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
+                  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
                     e.preventDefault();
                     handleSave();
                   } else if (e.key === 'Escape') {
