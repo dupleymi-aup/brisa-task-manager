@@ -80,8 +80,8 @@ export default function TaskList(
     // Update on server
     const updatedTask = updateTask(task.id, { completed: !task.completed });
     if (updatedTask) {
-      // Update server store to trigger transfer to client
-      setServerTasks({ store }, [...allTasks.map(t => t.id === task.id ? updatedTask : t)]);
+      // Update server store with current state
+      setServerTasks({ store }, getTasks());
 
       // Trigger rerender
       rerenderInAction({ type: 'targetComponent' });
@@ -92,8 +92,8 @@ export default function TaskList(
     // Delete from server
     const deleted = deleteTask(id);
     if (deleted) {
-      // Update server store
-      setServerTasks({ store }, [...allTasks.filter(t => t.id !== id)]);
+      // Update server store with current state
+      setServerTasks({ store }, getTasks());
 
       // Trigger rerender
       rerenderInAction({ type: 'targetComponent' });
@@ -110,8 +110,8 @@ export default function TaskList(
       tags: updatedTask.tags
     });
     if (task) {
-      // Update server store
-      setServerTasks({ store }, [...allTasks.map(t => t.id === task.id ? task : t)]);
+      // Update server store with current state
+      setServerTasks({ store }, getTasks());
 
       // Trigger rerender
       rerenderInAction({ type: 'targetComponent' });
@@ -122,8 +122,8 @@ export default function TaskList(
     // Clear from server
     clearCompletedTasks();
 
-    // Update server store
-    setServerTasks({ store }, [...allTasks.filter(t => !t.completed)]);
+    // Update server store with current state
+    setServerTasks({ store }, getTasks());
 
     // Trigger rerender
     rerenderInAction({ type: 'targetComponent' });

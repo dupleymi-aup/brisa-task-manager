@@ -1,6 +1,6 @@
 import type { RequestContext, WebContext } from 'brisa';
 import { rerenderInAction } from 'brisa/server';
-import { addTask, getServerTasks, setServerTasks } from '@/lib/taskStore';
+import { addTask, getTasks, getServerTasks, setServerTasks } from '@/lib/taskStore';
 import { Task } from '@/lib/taskModel';
 
 export default function TaskForm(
@@ -24,8 +24,6 @@ export default function TaskForm(
       .map(tag => tag.trim())
       .filter(tag => tag.length > 0);
 
-    const allTasks = getServerTasks({ store });
-
     const newTask = addTask({
       title: title.trim(),
       description: description.trim() || undefined,
@@ -35,7 +33,7 @@ export default function TaskForm(
       tags: parsedTags,
     });
 
-    setServerTasks({ store }, [...allTasks, newTask]);
+    setServerTasks({ store }, getTasks());
 
     setTitle('');
     setDescription('');
