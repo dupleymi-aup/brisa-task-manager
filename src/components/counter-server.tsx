@@ -22,9 +22,9 @@ export default function CounterServer(
     <div class="counter">
       <div class="counter-container">
         <h2>Server counter</h2>
-        <button class="increment-button" onClick={increment}></button>
+        <button class="increment-button" onClick={increment} aria-label="Increment">+</button>
         <div class="counter-value">{store.get('count')}</div>
-        <button class="decrement-button" onClick={decrement}></button>
+        <button class="decrement-button" onClick={decrement} aria-label="Decrement">−</button>
       </div>
     </div>
   );

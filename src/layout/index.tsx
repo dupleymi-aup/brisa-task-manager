@@ -8,7 +8,7 @@ import '@/styles/task.css';
 
 export default function Layout({ children }: { children: JSX.Element }) {
   return (
-    <html lang="en">
+    <html lang="ru">
       <head>
         <title id="title">Brisa</title>
         <meta name="theme-color" content="#ad1457" />
