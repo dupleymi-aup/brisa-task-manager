@@ -1,3 +1,32 @@
+/**
+ * TaskList — task-list.tsx
+ *
+ * This is the central server component of the Task Manager. It demonstrates:
+ *
+ * 1. **Server Component with State**: Uses Brisa's `state()` hook (from WebContext)
+ *    to manage UI state (filters, sort) on the client side while the component
+ *    itself renders on the server.
+ *
+ * 2. **Server Store Integration**: Calls `getServerTasks({ store })` to retrieve
+ *    tasks from the Brisa server store, ensuring data consistency across re-renders.
+ *
+ * 3. **Client-Side Filtering & Sorting**: All filtering and sorting happens in
+ *    memory on each render. This is fine for small datasets but would need
+ *    database-level filtering for large task lists.
+ *
+ * 4. **CRUD Handlers**: Each handler (toggle, delete, update, clear) follows
+ *    the same pattern: mutate → save to store → rerender. The `rerenderInAction`
+ *    call triggers a server-side re-render of this component.
+ *
+ * 5. **Component Composition**: Renders TaskForm, TaskFilterBar, and TaskItem
+ *    as children, passing callbacks for interactivity.
+ *
+ * Key Brisa concepts:
+ * - RequestContext: First parameter — provides server-side store and request info
+ * - WebContext: Second parameter — provides client-side state() and signals
+ * - rerenderInAction({ type: 'targetComponent' }): Re-render only this component
+ *   after a state change, avoiding full-page re-renders
+ */
 import type { RequestContext, WebContext } from 'brisa';
 import { rerenderInAction } from 'brisa/server';
 import { Task, TaskFilter, TaskPriorityFilter, TaskSortBy, TaskSortOrder } from '@/lib/taskModel';
@@ -10,10 +39,15 @@ export default function TaskList(
   { store }: RequestContext,
   { state }: WebContext,
 ) {
-  // Get tasks from server store
+  // Get tasks from server store — this is our source of truth.
+  // getServerTasks handles initialization if the store is empty.
   const allTasks = getServerTasks({ store });
 
-  // UI state using Brisa's state
+  // ─── UI State ──────────────────────────────────────────────────────────────
+  // Each `state()` call creates a reactive signal. When the signal's `.value`
+  // changes, Brisa knows which parts of the UI need to update.
+  // These signals live on the client side even though the component renders
+  // on the server — this is the "islands of interactivity" pattern.
   const [currentFilter, setCurrentFilter] = state<TaskFilter>('all');
   const [currentPriorityFilter, setCurrentPriorityFilter] = state<TaskPriorityFilter>('all');
   const [searchTerm, setSearchTerm] = state<string>('');
@@ -21,7 +55,9 @@ export default function TaskList(
   const [sortOrder, setSortOrder] = state<TaskSortOrder>('desc');
   const [selectedTags, setSelectedTags] = state<string[]>([]);
 
-  // Apply filters
+  // ─── Filtering ─────────────────────────────────────────────────────────────
+  // Filters are applied in sequence. A task must pass ALL filters to appear.
+  // This runs on every render — for large datasets, move filtering to the DB.
   const filteredTasks = allTasks.filter(task => {
     // Completion filter
     const matchesCompletion = 
@@ -48,7 +84,14 @@ export default function TaskList(
     return matchesCompletion && matchesPriority && matchesSearch && matchesTags;
   });
 
-  // Apply sorting
+  // ─── Sorting ───────────────────────────────────────────────────────────────
+  // Create a shallow copy with spread operator before sorting, because
+  // Array.sort() mutates in place. We must never mutate allTasks directly
+  // as it comes from the server store.
+  //
+  // Special handling:
+  // - priority: mapped to numbers (high=3, medium=2, low=1) for numeric comparison
+  // - dueDate: undefined values sort to Infinity (always at the end)
   const sortedTasks = [...filteredTasks].sort((a, b) => {
     let comparison = 0;
     const sortValueA = a[sortBy];
@@ -76,6 +119,13 @@ export default function TaskList(
     return sortOrder === 'asc' ? comparison : -comparison;
   });
 
+  // ─── CRUD Handlers ─────────────────────────────────────────────────────────
+  // Each handler follows the same 3-step pattern:
+  // 1. Mutate data via taskStore function
+  // 2. Sync the server store with setServerTasks(getTasks())
+  // 3. Trigger a re-render with rerenderInAction
+
+  /** Toggle a task's completion status */
   function handleToggleComplete(task: Task) {
     // Update on server
     const updatedTask = updateTask(task.id, { completed: !task.completed });
@@ -88,6 +138,7 @@ export default function TaskList(
     }
   }
 
+  /** Delete a task by ID */
   function handleDeleteTask(id: string) {
     // Delete from server
     const deleted = deleteTask(id);
@@ -100,6 +151,7 @@ export default function TaskList(
     }
   }
 
+  /** Update an existing task with new data (called from TaskItem edit mode) */
   function handleUpdateTask(updatedTask: Task) {
     // Update on server
     const task = updateTask(updatedTask.id, {
@@ -118,6 +170,7 @@ export default function TaskList(
     }
   }
 
+  /** Remove all completed tasks from the store */
   function handleClearCompleted() {
     // Clear from server
     clearCompletedTasks();

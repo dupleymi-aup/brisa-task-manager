@@ -1,4 +1,18 @@
-/* Navigation Styles */
+/**
+ * nav.css — Navigation Bar Styles
+ *
+ * CSS Features Demonstrated:
+ * - position: fixed — navbar stays visible while scrolling
+ * - linear-gradient — smooth color transition across the bar
+ * - hsla() — color with alpha channel for shadow transparency
+ * - Flexbox — space-between layout for logo and links
+ * - transition — smooth color change on hover
+ *
+ * Layout:
+ * ┌─────── Brisa logo ────────┬─────── Home | About ───────┐ ← fixed, full-width
+ */
+
+/* Navigation bar: fixed position with gradient background */
 nav {
   background-image: linear-gradient(to right, rgb(69 177 228), rgb(4 14 113));
   position: fixed;

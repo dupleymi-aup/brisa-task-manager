@@ -1,3 +1,27 @@
+/**
+ * Layout — layout/index.tsx
+ *
+ * The root layout component that wraps every page in the application.
+ *
+ * Key patterns demonstrated:
+ *
+ * 1. **Layout Component**: Receives `children` as a prop and wraps them in
+ *    a consistent HTML structure (header, main, footer). This is the
+ *    "outlet" pattern — pages render inside <main> automatically.
+ *
+ * 2. **Global CSS Imports**: All stylesheet imports live here, ensuring every
+ *    page has access to the same styles. CSS is scoped to the layout's
+ *    import graph, not globally applied.
+ *
+ * 3. **SEO Meta Tags**: The <head> section includes essential meta tags:
+ *    - <title>: Page title shown in browser tabs and search results
+ *    - <meta name="theme-color">: Mobile browser toolbar color
+ *    - <meta name="viewport">: Responsive design requirement
+ *    - <link rel="shortcut icon">: Browser tab icon
+ *
+ * 4. **Font Preloading**: preconnect hints speed up Google Fonts loading
+ *    by establishing early DNS/TLS connections.
+ */
 import Nav from '@/components/navigation';
 import Footer from '@/components/footer';
 

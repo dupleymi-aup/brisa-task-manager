@@ -1,16 +1,40 @@
+/**
+ * Homepage — index.tsx
+ *
+ * The main page of the application. Demonstrates conditional rendering based
+ * on authentication state.
+ *
+ * Key patterns demonstrated:
+ *
+ * 1. **Auth-Gated Rendering**: The page checks `isAuthenticated` and renders
+ *    either the login/register forms or the task manager UI. This is the
+ *    simplest form of route protection.
+ *
+ * 2. **Form Toggle**: The `showRegister` state switches between login and
+ *    registration forms within the same page, avoiding navigation.
+ *
+ * 3. **Server Component with Client State**: The page is a server component
+ *    (receives RequestContext) but uses `state()` for form inputs. This
+ *    shows how Brisa blends server rendering with client interactivity.
+ *
+ * 4. **Form Submission**: Both login and register forms prevent default
+ *    browser submission, call the authStore functions, and handle errors.
+ */
 import type { RequestContext, WebContext } from 'brisa';
 import { getAuth, login, logout, register } from '@/lib/authStore';
 import TaskList from '@/components/task-list';
 
 export default function Homepage({ store }: RequestContext, { state }: WebContext) {
+  // ─── Auth State ───────────────────────────────────────────────────────────
+  // Retrieved from the server store. This determines which UI to show.
   const { isAuthenticated, user } = getAuth({ store });
 
-  // State for login form
+  // ─── Login Form State ─────────────────────────────────────────────────────
   const [username, setUsername] = state('');
   const [password, setPassword] = state('');
   const [loginError, setLoginError] = state<string | null>(null);
-  
-  // State for register form
+
+  // ─── Register Form State ──────────────────────────────────────────────────
   const [regUsername, setRegUsername] = state('');
   const [regEmail, setRegEmail] = state('');
   const [regPassword, setRegPassword] = state('');

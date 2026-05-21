@@ -1,3 +1,29 @@
+/**
+ * TaskItem — task-item.tsx
+ *
+ * Renders a single task item with two modes: view and edit.
+ *
+ * Key patterns demonstrated:
+ *
+ * 1. **Presentation + Callback Pattern**: This component receives data via props
+ *    (task object) and callbacks (onToggleComplete, onDelete, onUpdate). It does
+ *    NOT mutate data directly — all changes flow through the parent's callbacks.
+ *    This is a unidirectional data flow pattern common in React/Brisa.
+ *
+ * 2. **Inline Editing**: Double-clicking the title switches to edit mode. The
+ *    component maintains its own local state for edit fields, initialized from
+ *    the task props. Cancel resets all fields back to original values.
+ *
+ * 3. **Overdue Detection**: Compares task.dueDate with the current date to
+ *    visually flag overdue tasks. This runs on every render so the UI stays
+ *    accurate without manual refresh.
+ *
+ * 4. **Conditional CSS Classes**: Dynamic class names (`completed`, `overdue`,
+ *    `due-today`) are applied based on task state, enabling CSS-driven visuals.
+ *
+ * 5. **Keyboard Shortcuts**: Enter to save, Escape to cancel, Ctrl+Enter for
+ *    newlines in textarea.
+ */
 import type { WebContext } from 'brisa';
 import { Task } from '@/lib/taskModel';
 
@@ -10,14 +36,19 @@ export default function TaskItem(
   },
   { state }: WebContext,
 ) {
-  // Determine if task is overdue (due date passed and not completed)
+  // ─── Overdue / Due-Today Detection ─────────────────────────────────────────
+  // isOverdue: due date has passed and task is not yet completed
+  // isDueToday: due date falls on the current calendar day
+  // These are recalculated on every render for accuracy.
   const isOverdue = !task.completed && task.dueDate && task.dueDate < new Date();
-  
-  // Determine if task is due today (due date is today and not completed)
-  const isDueToday = !task.completed && task.dueDate && 
+
+  const isDueToday = !task.completed && task.dueDate &&
     task.dueDate.toDateString() === new Date().toDateString();
 
-  // Editing state
+  // ─── Edit State ────────────────────────────────────────────────────────────
+  // Each editable field has its own signal. Values are initialized from the
+  // task props. When the user cancels, these signals reset to original values.
+  // Note: Date → string conversion for the date input (YYYY-MM-DD format).
   const [isEditing, setIsEditing] = state(false);
   const [editTitle, setEditTitle] = state(task.title);
   const [editDescription, setEditDescription] = state(task.description || '');
@@ -25,13 +56,21 @@ export default function TaskItem(
   const [editDueDate, setEditDueDate] = state<string>(task.dueDate ? task.dueDate.toISOString().split('T')[0] : '');
   const [editTags, setEditTags] = state<string>(task.tags.join(', '));
 
-  // Priority colors
+  // ─── Priority Color Map ───────────────────────────────────────────────────
+  // Maps priority levels to hex colors for inline styling of priority tags.
   const priorityColors: Record<Task['priority'], string> = {
     low: '#27ae60',    // Green
     medium: '#f39c12', // Orange
     high: '#e74c3c'    // Red
   };
 
+  /**
+   * handleSave — Validate and submit edited task data.
+   *
+   * Parses the date string, validates it, constructs a new Task object,
+   * and calls the parent's onUpdate callback. The actual persistence
+   * happens in the parent (TaskList), keeping this component presentation-focused.
+   */
   const handleSave = () => {
     // Parse dueDate if provided
     const parsedDueDate = editDueDate ? new Date(editDueDate) : undefined;
@@ -61,6 +100,12 @@ export default function TaskItem(
     }
   };
 
+  /**
+   * handleCancel — Discard edits and restore original task values.
+   *
+   * Resets all edit signals back to the task's current prop values
+   * and exits edit mode.
+   */
   const handleCancel = () => {
     setIsEditing(false);
     setEditTitle(task.title);

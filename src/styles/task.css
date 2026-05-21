@@ -1,6 +1,32 @@
-/* Task Manager Styles */
+/**
+ * task.css — Task Manager Styles
+ *
+ * All styles for the task management UI. Organized by component:
+ *
+ * 1. Task Form — add task input, details toggle, submit button
+ * 2. Task List — container, filter bar, task stats
+ * 3. Task Item — individual task display, states (completed/overdue)
+ * 4. Edit Mode — inline editing form, save/cancel buttons
+ * 5. Priority Tags — color-coded priority indicators
+ * 6. Responsive — mobile breakpoints
+ *
+ * CSS Features Demonstrated:
+ * - Flexbox for layouts (flex-wrap, gap, align-items)
+ * - CSS custom transitions for micro-interactions
+ * - @keyframes for slideDown animation
+ * - State-based styling (.completed, .overdue, .due-today, .selected)
+ * - Border-radius for pill-shaped elements (tag chips)
+ * - Responsive design with media queries
+ *
+ * Color Palette:
+ * - Primary: #4a90e2 (blue)
+ * - Success: #27ae60 (green)
+ * - Warning: #f39c12 (orange)
+ * - Danger:  #e74c3c (red)
+ * - Gray:    #666, #999, #ddd
+ */
 
-/* Task Form */
+/* ─── 1. Task Form ────────────────────────────────────────────────── */
 .task-form {
   background: white;
   padding: 1.5rem 2rem;
@@ -156,7 +182,7 @@
   transform: translateY(0);
 }
 
-/* Task List */
+/* ─── 2. Task List ────────────────────────────────────────────────── */
 .task-list {
   background: white;
   border-radius: 10px;
@@ -237,7 +263,7 @@
   background-color: rgba(74, 144, 226, 0.1);
 }
 
-/* Tag Filter Chips */
+/* Tag Filter Chips — toggleable pill buttons */
 .tag-filter-chips {
   display: flex;
   flex-wrap: wrap;
@@ -330,7 +356,8 @@
   font-style: italic;
 }
 
-/* Task Item */
+/* ─── 3. Task Item ────────────────────────────────────────────────── */
+/* States: .completed (faded), .overdue (red left border), .due-today (yellow highlight) */
 .task-item {
   display: flex;
   justify-content: space-between;
@@ -462,7 +489,8 @@
   background: #c0392b;
 }
 
-/* Priority Tags */
+/* ─── 4. Priority Tags ────────────────────────────────────────────── */
+/* Color is set via inline style from the priorityColors map in task-item.tsx */
 .priority-tag {
   display: inline-block;
   padding: 0.25rem 0.5rem;
@@ -474,7 +502,7 @@
   color: white;
 }
 
-/* Edit Mode */
+/* ─── 5. Edit Mode ────────────────────────────────────────────────── */
 .edit-input,
 .edit-textarea,
 .edit-select {
@@ -551,7 +579,8 @@
   margin-top: 1rem;
 }
 
-/* Responsive */
+/* ─── 6. Responsive Design (max-width: 600px) ─────────────────────── */
+/* Stacks flex items vertically, stretches full-width inputs, centers buttons */
 @media (max-width: 600px) {
   .task-form {
     padding: 1.5rem;

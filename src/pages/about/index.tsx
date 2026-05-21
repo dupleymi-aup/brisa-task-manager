@@ -1,3 +1,21 @@
+/**
+ * About page — about/index.tsx
+ *
+ * A static informational page about the Brisa framework.
+ *
+ * Key patterns demonstrated:
+ *
+ * 1. **Head Export**: The `Head` function sets the `<title>` for this page
+ *    specifically, overriding the default title from the Layout. This is
+ *    Brisa's per-page SEO pattern — export a `Head` function to customize
+ *    <head> elements on a per-page basis.
+ *
+ * 2. **Static Page**: Like Navigation and Footer, this page has no state
+ *    or interactivity. It is rendered once on the server to HTML.
+ *
+ * 3. **File-Based Routing**: The path /about maps to src/pages/about/index.tsx.
+ *    A file at src/pages/about/contact.tsx would map to /about/contact.
+ */
 export function Head() {
   return <title id="title">About Brisa</title>;
 }

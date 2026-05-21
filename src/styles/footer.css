@@ -1,3 +1,16 @@
+/**
+ * footer.css — Footer Styles
+ *
+ * CSS Features Demonstrated:
+ * - CSS Grid with place-items: center — single-cell centered layout
+ * - vh units — height relative to viewport (15vh = 15% of viewport height)
+ * - Google Fonts integration (Poppins)
+ *
+ * Why Grid? Even for a single element, Grid with place-items is cleaner
+ * than using flex + justify-content + align-items separately.
+ */
+
+/* Footer: centered grid with fixed viewport-relative height */
 footer {
   display: grid;
   font-family: "Poppins", sans-serif;

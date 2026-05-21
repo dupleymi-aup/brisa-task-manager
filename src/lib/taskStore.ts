@@ -117,14 +117,29 @@ function debouncedSaveToLocalStorage() {
 // Initialize tasks on module load
 initializeTasks();
 
+/**
+ * Returns all tasks currently in the store.
+ * @returns Array of all Task objects
+ */
 export function getTasks(): Task[] {
   return Array.from(tasks.values());
 }
 
+/**
+ * Retrieves a single task by its ID.
+ * @param id - The unique identifier of the task
+ * @returns The Task if found, undefined otherwise
+ */
 export function getTaskById(id: string): Task | undefined {
   return tasks.get(id);
 }
 
+/**
+ * Creates a new task with auto-generated ID and timestamps.
+ * Persists to localStorage with debounced save.
+ * @param task - Task data without id, createdAt, or updatedAt (these are auto-generated)
+ * @returns The newly created Task with all fields populated
+ */
 export function addTask(task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>): Task {
   const now = new Date();
   const newTask: Task = {
@@ -140,6 +155,14 @@ export function addTask(task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>): Tas
   return newTask;
 }
 
+/**
+ * Updates an existing task with the given changes.
+ * Automatically sets updatedAt to the current time.
+ * Persists to localStorage with debounced save.
+ * @param id - The ID of the task to update
+ * @param updates - Partial task object with fields to update
+ * @returns The updated Task, or undefined if the task was not found
+ */
 export function updateTask(id: string, updates: Partial<Task>): Task | undefined {
   const task = tasks.get(id);
   if (!task) return undefined;
@@ -155,6 +178,12 @@ export function updateTask(id: string, updates: Partial<Task>): Task | undefined
   return updatedTask;
 }
 
+/**
+ * Deletes a task by its ID.
+ * Persists to localStorage with debounced save.
+ * @param id - The ID of the task to delete
+ * @returns true if the task was found and deleted, false otherwise
+ */
 export function deleteTask(id: string): boolean {
   const result = tasks.delete(id);
   if (result) {
@@ -163,6 +192,10 @@ export function deleteTask(id: string): boolean {
   return result;
 }
 
+/**
+ * Removes all completed tasks from the store.
+ * Persists to localStorage with debounced save.
+ */
 export function clearCompletedTasks(): void {
   tasks.forEach((task, id) => {
     if (task.completed) {
@@ -172,7 +205,11 @@ export function clearCompletedTasks(): void {
   debouncedSaveToLocalStorage(); // Persist to localStorage with debounce
 }
 
-// Export tasks to JSON string
+/**
+ * Exports all tasks as a formatted JSON string.
+ * Date objects are serialized to ISO strings for portability.
+ * @returns JSON string representation of all tasks
+ */
 export function exportTasks(): string {
   const tasksArray = Array.from(tasks.values());
   const serializableTasks = tasksArray.map(task => ({
@@ -185,7 +222,12 @@ export function exportTasks(): string {
   return JSON.stringify(serializableTasks, null, 2);
 }
 
-// Import tasks from JSON string
+/**
+ * Imports tasks from a JSON string, replacing all existing tasks.
+ * Each task's ID is preserved from the import data or auto-generated if missing.
+ * @param json - JSON string containing an array of task objects
+ * @throws Error if the JSON is invalid or task data is malformed
+ */
 export function importTasks(json: string): void {
   try {
     const parsedTasks = JSON.parse(json) as Array<Partial<Task> & {
@@ -223,7 +265,15 @@ export function importTasks(json: string): void {
   }
 }
 
-// Server-side task store functions
+/**
+ * Server-side function to retrieve tasks from the Brisa store.
+ * Handles initialization if no tasks exist in the store yet.
+ * Transfers tasks to the client for hydration.
+ *
+ * In tests (where store is unavailable), returns tasks from the in-memory Map.
+ * @param context - Brisa RequestContext providing access to the server store
+ * @returns Array of all Task objects
+ */
 export function getServerTasks({ store }: RequestContext): Task[] {
   // Handle case when store is not available (e.g., in tests)
   if (!store || typeof store.transferToClient !== 'function') {
@@ -249,6 +299,15 @@ export function getServerTasks({ store }: RequestContext): Task[] {
   return Array.from(tasks.values());
 }
 
+/**
+ * Server-side function to save tasks to the Brisa store.
+ * Updates the in-memory Map, server store, and transfers to client.
+ * Also persists to localStorage when running in a browser environment.
+ *
+ * Call this after any mutation (add/update/delete) to keep all stores in sync.
+ * @param context - Brisa RequestContext providing access to the server store
+ * @param tasksArray - Complete array of tasks to store
+ */
 export function setServerTasks({ store }: RequestContext, tasksArray: Task[]): void {
   tasks = new Map(tasksArray.map(task => [task.id, task]));
   if (!store) return;

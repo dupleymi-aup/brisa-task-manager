@@ -1,7 +1,35 @@
+/**
+ * TaskFilterBar — task-filter-bar.tsx
+ *
+ * A presentational component that renders all filter/sort controls for the task list.
+ *
+ * Key patterns demonstrated:
+ *
+ * 1. **Controlled Components**: Every input (search, selects, buttons) receives
+ *    its value from props and notifies changes via callback props. The component
+ *    has no internal state — it is fully controlled by the parent (TaskList).
+ *
+ * 2. **Prop Drilling**: This component receives many props (10+) from TaskList.
+ *    In a larger app, you might use Brisa's store or context to avoid passing
+ *    so many props through intermediate components.
+ *
+ * 3. **Tag Filter Chips**: Tags are rendered as toggleable buttons. Clicking a
+ *    tag adds or removes it from the selectedTags array, demonstrating
+ *    array manipulation in event handlers.
+ *
+ * 4. **Task Counts**: Computes active/completed counts from the raw tasks
+ *    retrieved via getServerTasks, showing real-time statistics.
+ */
 import type { RequestContext } from 'brisa';
 import { getServerTasks } from '@/lib/taskStore';
 import { TaskFilter, TaskPriorityFilter, TaskSortBy, TaskSortOrder } from '@/lib/taskModel';
 
+/**
+ * Props for TaskFilterBar — all filter state and callbacks are passed from parent.
+ *
+ * The `on*Change` props are setter functions from Brisa's `state()` hook.
+ * When called, they update the signal and trigger a re-render of the parent.
+ */
 interface TaskFilterBarProps {
   currentFilter: TaskFilter;
   currentPriorityFilter: TaskPriorityFilter;

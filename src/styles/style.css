@@ -1,4 +1,33 @@
-/* General Styles */
+/**
+ * style.css — Global Styles
+ *
+ * This is the main stylesheet for the Brisa Task Manager.
+ *
+ * Architecture:
+ * - Imported once in layout/index.tsx, applied to all pages
+ * - Uses CSS nesting (native, no preprocessor needed)
+ * - CSS Modules are NOT used — classes are scoped by naming convention
+ *
+ * Sections:
+ * 1. Reset & Base — box-sizing, fonts, body defaults
+ * 2. Hero — gradient header section
+ * 3. Counter — demo counter components
+ * 4. About — about page layout
+ * 5. CTA Link — animated hover effect with data-replace
+ * 6. Auth — login/register form styles
+ * 7. Form — reusable form component styles
+ * 8. Task Manager — container for the task manager UI
+ *
+ * CSS Features Demonstrated:
+ * - linear-gradient with background-clip: text (gradient text)
+ * - CSS nesting (nested selectors without & prefix)
+ * - ::before/::after pseudo-elements for animations
+ * - CSS transitions with cubic-bezier easing
+ * - content: attr(data-replace) — reading HTML attributes from CSS
+ * - Responsive media queries
+ */
+
+/* ─── 1. Reset & Base ─────────────────────────────────────────────── */
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +41,8 @@ body {
   text-align: center;
 }
 
-/* Hero Section */
+/* ─── 2. Hero Section ─────────────────────────────────────────────── */
+/* Gradient background with gradient text using background-clip: text */
 .hero {
   background: linear-gradient(
     90deg,
@@ -54,7 +84,7 @@ body {
   font-size: 1.25rem;
 }
 
-/* Counter Section */
+/* ─── 3. Counter Section ──────────────────────────────────────────── */
 .counter {
   display: flex;
   align-items: center;
@@ -139,7 +169,7 @@ body {
   }
 }
 
-/* About Section */
+/* ─── 4. About Section ────────────────────────────────────────────── */
 .about-section {
   padding: 3rem 2rem;
 }
@@ -204,6 +234,14 @@ code {
   border-radius: .2rem;
 }
 
+/* ─── 5. CTA Link — Animated Hover Effect ─────────────────────────── */
+/*
+ * This creates a text-replacement animation on hover:
+ *   - ::before draws an underline that slides in
+ *   - ::after contains the replacement text (from data-replace attr)
+ *   - The original <span> slides out to the left
+ * All three use the same cubic-bezier timing for smooth synchronization.
+ */
 .CTA {
   overflow: hidden;
   position: relative;
@@ -279,7 +317,7 @@ code {
   margin: 2rem auto;
 }
 
-/* Auth Styles */
+/* ─── 6. Auth Styles ──────────────────────────────────────────────── */
 .auth-container {
   max-width: 400px;
   margin: 2rem auto;
@@ -356,7 +394,7 @@ code {
   background-color: #c82333;
 }
 
-/* Form Styles */
+/* ─── 7. Form Styles (Reusable) ───────────────────────────────────── */
 .form-group {
   margin-bottom: 1rem;
 }

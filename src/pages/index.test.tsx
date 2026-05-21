@@ -1,3 +1,17 @@
+/**
+ * Task Model Tests — index.test.tsx
+ *
+ * Type-level and structural tests for the Task data model.
+ *
+ * These tests verify that:
+ * 1. The Task interface accepts the expected shape (structural typing)
+ * 2. All union type variants are valid (low/medium/high priority, etc.)
+ * 3. Type aliases have the expected number of options
+ *
+ * Note: These tests catch type errors at runtime by constructing values
+ * of the expected types. If TypeScript compiles, these tests will pass
+ * unless the runtime shape changes.
+ */
 import { describe, expect, it } from 'bun:test';
 import { Task, TaskFilter, TaskPriorityFilter, TaskSortBy, TaskSortOrder } from '@/lib/taskModel';
 

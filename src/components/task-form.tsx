@@ -1,3 +1,25 @@
+/**
+ * TaskForm — task-form.tsx
+ *
+ * Renders the "add new task" form with expandable detail fields.
+ *
+ * Key patterns demonstrated:
+ *
+ * 1. **Form State Management**: Each form field has its own `state()` signal.
+ *    The form uses controlled inputs — value and onChange are both managed
+ *    by Brisa signals.
+ *
+ * 2. **Collapsible Details**: The `showDetails` signal toggles visibility of
+ *    additional fields (description, priority, due date, tags). This keeps
+ *    the UI clean for quick task entry.
+ *
+ * 3. **Form Submission**: On submit, the form parses comma-separated tags,
+ *    creates a new task via addTask(), syncs the server store, resets all
+ *    fields, and triggers a re-render.
+ *
+ * 4. **Keyboard Shortcut**: Pressing Enter in the title field submits the form
+ *    immediately for quick task creation.
+ */
 import type { RequestContext, WebContext } from 'brisa';
 import { rerenderInAction } from 'brisa/server';
 import { addTask, getTasks, getServerTasks, setServerTasks } from '@/lib/taskStore';
@@ -7,6 +29,10 @@ export default function TaskForm(
   { store }: RequestContext,
   { state }: WebContext,
 ) {
+  // ─── Form Field State ─────────────────────────────────────────────────────
+  // Each field is a reactive signal. The spread operator syntax `state(value)`
+  // returns a tuple: [getter, setter]. When the setter is called, Brisa
+  // schedules a re-render of this component.
   const [title, setTitle] = state('');
   const [description, setDescription] = state('');
   const [priority, setPriority] = state<Task['priority']>('medium');
@@ -14,6 +40,11 @@ export default function TaskForm(
   const [tags, setTags] = state('');
   const [showDetails, setShowDetails] = state(false);
 
+  /**
+   * handleSubmit — Create a new task from form data.
+   *
+   * Flow: validate → parse → create → sync store → reset → rerender
+   */
   const handleSubmit = (e: Event) => {
     e.preventDefault();
     if (!title.trim()) return;
